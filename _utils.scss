@@ -1,6 +1,22 @@
+//================================== General Settings ======================================//
+
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0};
+
+.foundation-data-attribute-namespace {
+    font-family: false;
+}
+
+/*
+// Adds to your app.scss:
+//	
+	@import	"../scss/_utils.scss",
+			"../scss/_grid.scss",
+			"../scss/_color.scss";
 //
-// mixin for bullet proof font declaration syntax
-//
+*/
+//================================== Typography ======================================//
+
 @mixin declare-font-face($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {	
 	@font-face {
 	  font-family: '#{$font-family}';
@@ -9,16 +25,10 @@
 	       url('#{$font-filename}.woff') format('woff'), /* Modern Browsers */
 	       url('#{$font-filename}.ttf')  format('truetype'), /* Safari, Android, iOS */
 	       url('#{$font-filename}.svg') format('svg'); /* Legacy iOS */
-
 	font-style:   $font-style;
 	font-weight:  $font-weight;
 	font-stretch: $font-stretch;
 	}
-}
-
-@mixin colorize($color:inherit,$bgcolor:inherit){
-	color: $color;
-	background-color: $bgcolor;
 }
 
 @mixin typographize($typ-h1:2.2em,$typ-h2:2.0em,$typ-h3:1.8em,$typ-h4:1.6em,$typ-h5:1.4em,$typ-p:1.2em){
@@ -28,4 +38,35 @@
 	h4{font-size: $typ-h4};
 	h5{font-size: $typ-h5};
 	p{font-size: $typ-p};
+}
+
+@mixin letterpress($base:#222,$shadow:#555){
+	color: $base;
+	text-shadow: 0px 2px 3px $shadow;
+}
+
+//================================== Colors ======================================//
+
+@mixin colorize($color:inherit,$bgcolor:inherit){
+	color: $color;
+	background-color: $bgcolor;
+}
+
+@mixin linear-gradient($fromColor, $toColor) {
+  background-color: $toColor; /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor)); /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(top, $fromColor, $toColor); /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image:    -moz-linear-gradient(top, $fromColor, $toColor); /* FF3.6 */
+  background-image:     -ms-linear-gradient(top, $fromColor, $toColor); /* IE10 */
+  background-image:      -o-linear-gradient(top, $fromColor, $toColor); /* Opera 11.10+ */
+  background-image:         linear-gradient(top, $fromColor, $toColor);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
+}
+
+//================================== Extras ======================================//
+
+@mixin roundify($radius:5px){
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
 }
