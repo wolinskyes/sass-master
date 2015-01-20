@@ -9,7 +9,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 /*
 // Adds to your app.scss:
-//	
+//
 	@import	"../scss/_utils.scss",
 			"../scss/_grid.scss",
 			"../scss/_color.scss";
@@ -17,7 +17,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 */
 //================================== Typography ======================================//
 
-@mixin declare-font-face($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {	
+@mixin declare-font-face($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {
 	@font-face {
 	  font-family: '#{$font-family}';
 	  src: url('#{$font-filename}.eot'); /* IE9 Compat Modes */
@@ -29,6 +29,12 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	font-weight:  $font-weight;
 	font-stretch: $font-stretch;
 	}
+}
+
+@mixin elegantify {
+  font-weight: 100 !important;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
 @mixin typographize($typ-h1:2.2em,$typ-h2:2.0em,$typ-h3:1.8em,$typ-h4:1.6em,$typ-h5:1.4em,$typ-p:1.2em){
