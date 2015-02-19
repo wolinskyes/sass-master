@@ -7,14 +7,22 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     font-family: false;
 }
 
-/*
-// Adds to your app.scss:
-//
-	@import	"../scss/_utils.scss",
-			"../scss/_grid.scss",
-			"../scss/_color.scss";
-//
-*/
+//============================= Responsive Grid =================================//
+
+@mixin respond-to($name) {
+  $value: map-get($breakpoints, $name);
+  @if map-has-key($breakpoints, $name) {
+    @media #{inspect(map-get($breakpoints, $name))} {
+      @content;
+    }
+  }
+  @else {
+    @warn "Unfortunately, no value could be retrieved from '#{$name}'. "
+    + "Please make sure it is defined in '$breakpoints' map.";
+  }
+}
+
+
 //================================== Typography ======================================//
 
 @mixin declare-font-face($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {
@@ -31,10 +39,99 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	}
 }
 
+@mixin placeholder($color,$font-family,$text-transform,$size,$padding){
+  @include elegantify;
+  ::-webkit-input-placeholder {
+    color: $color;
+    font-family: $font-family;
+    font-size: $size;
+    text-transform: $text-transform;
+    padding-top:$padding;
+  }
+
+  :-moz-placeholder { /* Firefox 18- */
+    color: $color;
+    font-family: $font-family;
+    font-size: $size;
+    text-transform: $text-transform;
+    padding-top:$padding;
+  }
+
+  ::-moz-placeholder {  /* Firefox 19+ */
+    color: $color;
+    font-family: $font-family;
+    font-size: $size;
+    text-transform: $text-transform;
+    padding-top:$padding;
+  }
+
+  :-ms-input-placeholder {
+    color: $color;
+    font-family: $font-family;
+    font-size: $size;
+    text-transform: $text-transform;
+    padding-top:$padding;
+  }
+
+}
+
 @mixin elegantify {
   font-weight: 100 !important;
   -webkit-font-smoothing: antialiased;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+// (default size, default line height, [breakpoint sizes])
+// @include responsive-type-breakpoints(1, 1, 1,1,1,1.2,3,3);
+
+// @include responsive-type-breakpoint(3, 3.6, 'min-device-width: 800px');
+// font size, line height, rate of scale
+// @include scale-type-linear(3, 3.6, .2);
+
+@mixin type-size($sizeValue: 1, $lineHeight: $sizeValue) {
+  font-size: ($sizeValue) + em;
+  line-height: ($lineHeight * 1.4) + em;
+}
+
+@mixin scale-type-linear($fontSize, $lineHeight, $rate) {
+  $ratio: $lineHeight/$fontSize;
+  @include type-size($fontSize, $lineHeight);
+  @each $name, $breakpoint in $breakpoints {
+    $newFontSize: $fontSize - $rate;
+    @media only screen and #{inspect(map-get($breakpoints, $name))} {
+      @include type-size($newFontSize, $newFontSize*$ratio)
+    }
+    // Increment $rate
+    $rate: $rate + $rate;
+  }
+}
+
+@mixin responsive-type-breakpoints($fontSize, $lineHeight, $sizes...) {
+  $ratio: $lineHeight/$fontSize;
+  $i: 1;
+  @include type-size($fontSize, $lineHeight);
+  @each $name, $breakpoint in $breakpoints {
+    // Only return values when the breakpoint ins't 0
+    @if nth($sizes, $i) != 0 {
+      $newFontSize: nth($sizes, $i);
+      @media only screen and #{inspect(map-get($breakpoints, $name))} {
+        @include type-size($newFontSize, $newFontSize*$ratio)
+      }
+    }
+    $i: $i + 1;
+  }
+}
+
+@mixin responsive-type-breakpoint($fontSize, $lineHeight, $breakpoint) {
+  @if (#{inspect(map-get($breakpoints, $breakpoint))}) != 'null' {
+    @media only screen and #{inspect(map-get($breakpoints, $breakpoint))} {
+      @include type-size($fontSize, $lineHeight);
+    }
+  } @else {
+    @media only screen and ($breakpoint) {
+      @include type-size($fontSize, $lineHeight);
+    }
+  }
 }
 
 @mixin typographize($typ-h1:2.2em,$typ-h2:2.0em,$typ-h3:1.8em,$typ-h4:1.6em,$typ-h5:1.4em,$typ-p:1.2em){
